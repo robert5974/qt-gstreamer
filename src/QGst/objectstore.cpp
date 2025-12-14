@@ -16,10 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QAtomicInt>
 #include <QtCore/QHash>
 #include <QtCore/QMutex>
-
 
 #include "objectstore_p.h"
 
@@ -27,7 +25,7 @@ namespace {
 class GlobalStore {
 public:
   QMutex mutex;
-  QHash<const void *, QAtomicInt> refCount;
+  QHash<const void *, int> refCount;
 };
 } // namespace
 
@@ -44,10 +42,10 @@ bool ObjectStore::put(const void *ptr) {
 
   QMutexLocker lock(&gs->mutex);
   if (!gs->refCount.contains(ptr)) {
-    gs->refCount.insert(ptr, QAtomicInt(0));
+    gs->refCount.insert(ptr, 0);
     mustAddStrongRef = true;
   }
-  (gs->refCount[ptr]).ref();
+  gs->refCount[ptr]++;
 
   return mustAddStrongRef;
 }
@@ -68,13 +66,9 @@ bool ObjectStore::take(const void *ptr) {
   }
 
   // Decrease our bindings (weak) reference count
-  (gs->refCount[ptr]).deref();
+  gs->refCount[ptr]--;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  if (!gs->refCount[ptr].load()) {
-#else
-  if (!gs->refCount[ptr]) {
-#endif
+  if (gs->refCount[ptr] == 0) {
     // refCount is 0
     gs->refCount.remove(ptr);
     mustSubtractStrongRef = true;
