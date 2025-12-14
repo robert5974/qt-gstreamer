@@ -172,8 +172,8 @@ add_library(${QTGSTREAMER_LIBRARY} ${SHARED_OR_STATIC} ${QtGStreamer_SRCS})
 set_target_properties(${QTGSTREAMER_LIBRARY} PROPERTIES OUTPUT_NAME ${QTGSTREAMER_LIBRARY}-${QTGSTREAMER_API_VERSION}
                                                SOVERSION ${QTGSTREAMER_SOVERSION}
                                                  VERSION ${QTGSTREAMER_VERSION})
-target_link_libraries(${QTGSTREAMER_LIBRARY} LINK_PUBLIC ${QTGLIB_LIBRARY})
-target_link_libraries(${QTGSTREAMER_LIBRARY} LINK_PRIVATE ${GOBJECT_LIBRARIES}
+target_link_libraries(${QTGSTREAMER_LIBRARY} PUBLIC ${QTGLIB_LIBRARY})
+target_link_libraries(${QTGSTREAMER_LIBRARY} PRIVATE ${GOBJECT_LIBRARIES}
                                   ${GSTREAMER_LIBRARY}
                                   ${GSTREAMER_AUDIO_LIBRARY}
                                   ${GSTREAMER_VIDEO_LIBRARY}
@@ -186,7 +186,7 @@ if (Qt4or5_Quick2_FOUND)
     set_target_properties(${QTGSTREAMER_QUICK_LIBRARY} PROPERTIES OUTPUT_NAME ${QTGSTREAMER_QUICK_LIBRARY}-${QTGSTREAMER_API_VERSION}
                                                     SOVERSION ${QTGSTREAMER_QUICK_SOVERSION}
                                                       VERSION ${QTGSTREAMER_VERSION})
-    target_link_libraries(${QTGSTREAMER_QUICK_LIBRARY} LINK_PUBLIC ${QTGSTREAMER_LIBRARY})
+    target_link_libraries(${QTGSTREAMER_QUICK_LIBRARY} PUBLIC ${QTGSTREAMER_LIBRARY})
     qt4or5_use_modules(${QTGSTREAMER_QUICK_LIBRARY} LINK_PUBLIC Quick2)
     qt4or5_use_modules(${QTGSTREAMER_QUICK_LIBRARY} LINK_PRIVATE Core)
 endif()
@@ -196,7 +196,7 @@ add_library(${QTGSTREAMER_UI_LIBRARY} ${SHARED_OR_STATIC} ${QtGStreamerUi_SRCS})
 set_target_properties(${QTGSTREAMER_UI_LIBRARY} PROPERTIES OUTPUT_NAME ${QTGSTREAMER_UI_LIBRARY}-${QTGSTREAMER_API_VERSION}
                                                  SOVERSION ${QTGSTREAMER_UI_SOVERSION}
                                                    VERSION ${QTGSTREAMER_VERSION})
-target_link_libraries(${QTGSTREAMER_UI_LIBRARY} LINK_PUBLIC ${QTGSTREAMER_LIBRARY})
+target_link_libraries(${QTGSTREAMER_UI_LIBRARY} PUBLIC ${QTGSTREAMER_LIBRARY})
 qt4or5_use_modules(${QTGSTREAMER_UI_LIBRARY} LINK_PUBLIC Widgets Gui)
 qt4or5_use_modules(${QTGSTREAMER_UI_LIBRARY} LINK_PRIVATE Core)
 if (Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
@@ -208,8 +208,8 @@ add_library(${QTGSTREAMER_UTILS_LIBRARY} ${SHARED_OR_STATIC} ${QtGStreamerUtils_
 set_target_properties(${QTGSTREAMER_UTILS_LIBRARY} PROPERTIES OUTPUT_NAME ${QTGSTREAMER_UTILS_LIBRARY}-${QTGSTREAMER_API_VERSION}
                                                     SOVERSION ${QTGSTREAMER_UTILS_SOVERSION}
                                                       VERSION ${QTGSTREAMER_VERSION})
-target_link_libraries(${QTGSTREAMER_UTILS_LIBRARY} LINK_PUBLIC ${QTGSTREAMER_LIBRARY})
-target_link_libraries(${QTGSTREAMER_UTILS_LIBRARY} LINK_PRIVATE ${GSTREAMER_LIBRARY} ${GSTREAMER_APP_LIBRARY})
+target_link_libraries(${QTGSTREAMER_UTILS_LIBRARY} PUBLIC ${QTGSTREAMER_LIBRARY})
+target_link_libraries(${QTGSTREAMER_UTILS_LIBRARY} PRIVATE ${GSTREAMER_LIBRARY} ${GSTREAMER_APP_LIBRARY})
 qt4or5_use_modules(${QTGSTREAMER_UTILS_LIBRARY} LINK_PRIVATE Core)
 
 # Install

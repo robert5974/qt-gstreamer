@@ -49,7 +49,7 @@ add_library(${QTGLIB_LIBRARY} ${SHARED_OR_STATIC} ${QtGLib_SRCS})
 set_target_properties(${QTGLIB_LIBRARY} PROPERTIES OUTPUT_NAME ${QTGLIB_LIBRARY}-${QTGLIB_API_VERSION}
                                           SOVERSION ${QTGLIB_SOVERSION}
                                             VERSION ${QTGSTREAMER_VERSION})
-target_link_libraries(${QTGLIB_LIBRARY} LINK_PRIVATE ${GOBJECT_LIBRARIES})
+target_link_libraries(${QTGLIB_LIBRARY} PRIVATE ${GOBJECT_LIBRARIES})
 qt4or5_use_modules(${QTGLIB_LIBRARY} LINK_PUBLIC Core)
 
 # Install
