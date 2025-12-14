@@ -171,7 +171,7 @@ struct CppClosure<F, R(Args...)> {
 
 template <typename T, typename R, typename... Args>
 bool connect(void *instance, const char *detailedSignal, T *receiver,
-             R (T::*slot)(Args...), ConnectFlags flags) {
+             R (T::*slot)(Args...), ConnectFlags flags = ConnectFlags()) {
   typedef Private::MemberFunction<T, R, Args...> F;
 
   F &&f = Private::mem_fn(slot, receiver);
@@ -192,7 +192,6 @@ bool connect(void *instance, const char *detailedSignal, T *receiver,
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/preprocessor.hpp>
-
 
 // include the second part of this file as many times as QGLIB_CONNECT_MAX_ARGS
 // specifies
@@ -299,7 +298,7 @@ struct CppClosure<F, R(QGLIB_CONNECT_IMPL_TEMPLATE_ARGS)>
 template <typename T, typename R QGLIB_CONNECT_IMPL_TRAILING_TEMPLATE_PARAMS>
 bool connect(void *instance, const char *detailedSignal, T *receiver,
              R (T::*slot)(QGLIB_CONNECT_IMPL_TEMPLATE_ARGS),
-             ConnectFlags flags) {
+             ConnectFlags flags = ConnectFlags()) {
   boost::function<R(QGLIB_CONNECT_IMPL_TEMPLATE_ARGS)> f =
       boost::bind(slot, receiver QGLIB_CONNECT_IMPL_BIND_ARGS);
 
