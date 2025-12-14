@@ -36,7 +36,7 @@ if (Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     set(GstQtVideoSink_LINK_OPENGL TRUE)
 endif()
 
-if (Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
+if (NOT USE_QT6 AND Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     set(GstQtVideoSink_SRCS
         ${GstQtVideoSink_SRCS}
         painters/openglsurfacepainter.cpp
@@ -79,7 +79,7 @@ qt4or5_use_modules(gst${QTVIDEOSINK_NAME} Core Gui Widgets)
 if (Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     qt4or5_use_modules(gst${QTVIDEOSINK_NAME} Quick2)
 endif()
-if (Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
+if (NOT USE_QT6 AND Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     qt4or5_use_modules(gst${QTVIDEOSINK_NAME} OpenGL)
 endif()
 install(TARGETS gst${QTVIDEOSINK_NAME} DESTINATION ${QTGSTREAMER_GST_PLUGINS_INSTALL_DIR})
@@ -100,7 +100,7 @@ if (QTGSTREAMER_TESTS)
         ${GstQtVideoSink_GL_LIBS}
     )
     qt4or5_use_modules(qtvideosink_autotest Core Gui Widgets Test)
-    if (Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
+    if (NOT USE_QT6 AND Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
         qt4or5_use_modules(qtvideosink_autotest OpenGL)
     endif()
 endif()
