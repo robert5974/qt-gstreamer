@@ -23,7 +23,7 @@ set(GstQtVideoSink_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/gstqtvideosinkmarshal.c
 )
 
-if (Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
+if (NOT USE_QT6 AND Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     set(GstQtVideoSink_SRCS
         ${GstQtVideoSink_SRCS}
         painters/videomaterial.cpp
@@ -76,7 +76,7 @@ target_link_libraries(gst${QTVIDEOSINK_NAME}
     ${GstQtVideoSink_GL_LIBS}
 )
 qt4or5_use_modules(gst${QTVIDEOSINK_NAME} Core Gui Widgets)
-if (Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
+if (NOT USE_QT6 AND Qt4or5_Quick2_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
     qt4or5_use_modules(gst${QTVIDEOSINK_NAME} Quick2)
 endif()
 if (NOT USE_QT6 AND Qt4or5_OpenGL_FOUND AND (OPENGL_FOUND OR OPENGLES2_FOUND))
