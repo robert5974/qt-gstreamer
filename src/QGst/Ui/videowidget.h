@@ -19,13 +19,14 @@
 #ifndef QGST_UI_VIDEOWIDGET_H
 #define QGST_UI_VIDEOWIDGET_H
 
-#include "global.h"
 #include "../element.h"
+#include "global.h"
+
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-# include <QtWidgets/QWidget>
+#include <QtWidgets/QWidget>
 #else
-# include <QtGui/QWidget>
+#include <QtGui/QWidget>
 #endif
 
 namespace QGst {
@@ -56,71 +57,74 @@ class AbstractRenderer;
  * Also, you cannot start or stop watching a pipeline that is in PLAYING state.
  * Doing so may crash the widget.
  *
- * This widget will always keep a strong reference to the element that it is given,
- * whether this is a video sink or a pipeline. If you want to destroy this element
- * or pipeline, you need to call releaseVideoSink() or stopPipelineWatch() respectively.
+ * This widget will always keep a strong reference to the element that it is
+ * given, whether this is a video sink or a pipeline. If you want to destroy
+ * this element or pipeline, you need to call releaseVideoSink() or
+ * stopPipelineWatch() respectively.
  *
  * \note Autoplug video sinks such as autovideosink are not supported due
- * to the complexity of handling them correctly. If you wish to use autovideosink,
- * you can either set it to READY state and get its child VideoOverlay element
- * or just watch the pipeline in which you plug it.
+ * to the complexity of handling them correctly. If you wish to use
+ * autovideosink, you can either set it to READY state and get its child
+ * VideoOverlay element or just watch the pipeline in which you plug it.
  */
-class QTGSTREAMERUI_EXPORT VideoWidget : public QWidget
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(VideoWidget)
+class QTGSTREAMERUI_EXPORT VideoWidget : public QWidget {
+  Q_OBJECT
+  Q_DISABLE_COPY(VideoWidget)
 public:
-    explicit VideoWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
-    virtual ~VideoWidget();
+  explicit VideoWidget(QWidget *parent = 0,
+                       Qt::WindowFlags f = Qt::WindowFlags());
+  virtual ~VideoWidget();
 
+  /*! Returns the video sink element that is currently providing this
+   * widget's image, or a null ElementPtr if no sink has been set.
+   */
+  ElementPtr videoSink() const;
 
-    /*! Returns the video sink element that is currently providing this
-     * widget's image, or a null ElementPtr if no sink has been set.
-     */
-    ElementPtr videoSink() const;
+  /*! Sets the video sink element that is going to be embedded.
+   * Any sink that implements the VideoOverlay interface will work, as well as
+   * "qtvideosink", "qtglvideosink" and "qwidgetvideosink" (or "qt5videosink",
+   * "qt5glvideosink" and "qwidget5videosink" in Qt5)
+   * \note
+   * \li This method \em must be called from Qt's GUI thread.
+   * \li Passing a null ElementPtr has the same effect as calling
+   * releaseVideoSink().
+   * \li You cannot set a new sink if the previous one has not been released
+   * first.
+   */
+  void setVideoSink(const ElementPtr &sink);
 
-    /*! Sets the video sink element that is going to be embedded.
-     * Any sink that implements the VideoOverlay interface will work, as well as
-     * "qtvideosink", "qtglvideosink" and "qwidgetvideosink" (or "qt5videosink",
-     * "qt5glvideosink" and "qwidget5videosink" in Qt5)
-     * \note
-     * \li This method \em must be called from Qt's GUI thread.
-     * \li Passing a null ElementPtr has the same effect as calling releaseVideoSink().
-     * \li You cannot set a new sink if the previous one has not been released first.
-     */
-    void setVideoSink(const ElementPtr & sink);
+  /*! Detaches the current video sink from the widget and drops any references
+   * to it.
+   * \note This method \em must be called from Qt's GUI thread.
+   */
+  void releaseVideoSink();
 
-    /*! Detaches the current video sink from the widget and drops any references to it.
-     * \note This method \em must be called from Qt's GUI thread.
-     */
-    void releaseVideoSink();
+  /*! Starts watching a pipeline for any attached VideoOverlay sinks. If such
+   * a sink is found while the pipeline prepares itself to start playing,
+   * it is embedded to the widget.
+   * \note
+   * \li This method \em must be called from Qt's GUI thread.
+   * \li Passing a null PipelinePtr has the same effect as calling
+   * stopPipelineWatch().
+   * \li You cannot start watching a new pipeline if you don't stop watching the
+   * previous one first with stopPipelineWatch().
+   */
+  void watchPipeline(const PipelinePtr &pipeline);
 
-
-    /*! Starts watching a pipeline for any attached VideoOverlay sinks. If such
-     * a sink is found while the pipeline prepares itself to start playing,
-     * it is embedded to the widget.
-     * \note
-     * \li This method \em must be called from Qt's GUI thread.
-     * \li Passing a null PipelinePtr has the same effect as calling stopPipelineWatch().
-     * \li You cannot start watching a new pipeline if you don't stop watching the previous
-     * one first with stopPipelineWatch().
-     */
-    void watchPipeline(const PipelinePtr & pipeline);
-
-    /*! Stops watching a pipeline and also detaches the sink
-     * that was discovered in the pipeline, if any.
-     * \note This method \em must be called from Qt's GUI thread.
-     */
-    void stopPipelineWatch();
+  /*! Stops watching a pipeline and also detaches the sink
+   * that was discovered in the pipeline, if any.
+   * \note This method \em must be called from Qt's GUI thread.
+   */
+  void stopPipelineWatch();
 
 protected:
-    virtual void paintEvent(QPaintEvent *event);
+  virtual void paintEvent(QPaintEvent *event);
 
 private:
-    AbstractRenderer *d;
+  AbstractRenderer *d;
 };
 
-} //namespace Ui
-} //namespace QGst
+} // namespace Ui
+} // namespace QGst
 
 #endif // QGST_UI_VIDEOWIDGET_H

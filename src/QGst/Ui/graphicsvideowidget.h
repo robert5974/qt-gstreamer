@@ -22,9 +22,9 @@
 #include <QtCore/QPointer>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-# include <QtWidgets/QGraphicsWidget>
+#include <QtWidgets/QGraphicsWidget>
 #else
-# include <QtGui/QGraphicsWidget>
+#include <QtGui/QGraphicsWidget>
 #endif
 
 namespace QGst {
@@ -40,23 +40,25 @@ namespace Ui {
  *
  * \sa GraphicsVideoSurface
  */
-class QTGSTREAMERUI_EXPORT GraphicsVideoWidget : public QGraphicsWidget
-{
-    Q_OBJECT
-    Q_DISABLE_COPY(GraphicsVideoWidget)
-    Q_PROPERTY(QGst::Ui::GraphicsVideoSurface* surface READ surface WRITE setSurface)
+class QTGSTREAMERUI_EXPORT GraphicsVideoWidget : public QGraphicsWidget {
+  Q_OBJECT
+  Q_DISABLE_COPY(GraphicsVideoWidget)
+  Q_PROPERTY(
+      QGst::Ui::GraphicsVideoSurface *surface READ surface WRITE setSurface)
 public:
-    explicit GraphicsVideoWidget(QGraphicsItem *parent = 0, Qt::WindowFlags wFlags = 0);
-    virtual ~GraphicsVideoWidget();
+  explicit GraphicsVideoWidget(QGraphicsItem *parent = 0,
+                               Qt::WindowFlags wFlags = Qt::WindowFlags());
+  virtual ~GraphicsVideoWidget();
 
-    /*! Reimplemented from QGraphicsWidget. Do not call directly. */
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+  /*! Reimplemented from QGraphicsWidget. Do not call directly. */
+  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                     QWidget *widget = 0);
 
-    GraphicsVideoSurface *surface() const;
-    void setSurface(GraphicsVideoSurface *surface);
+  GraphicsVideoSurface *surface() const;
+  void setSurface(GraphicsVideoSurface *surface);
 
 private:
-    QPointer<GraphicsVideoSurface> m_surface;
+  QPointer<GraphicsVideoSurface> m_surface;
 };
 
 } // namespace Ui
